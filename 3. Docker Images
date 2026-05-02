@@ -1,1 +1,188 @@
 
+Docker Images in Detail :
+
+Docker Image is a read-only template used to create containers in Docker.
+
+Think of it like:
+Image = Blueprint / Template / Snapshot of an application
+Container = Running instance of that image
+
+Example:
+NGINX image → can create many NGINX containers
+Ubuntu image → can create Ubuntu containers
+
+
+Imagine you have a cake recipe:
+
+Recipe = Image
+Baked cake = Container
+
+You can use one recipe many times to create many cakes.
+
+Docker Image Architecture
++-----------------------------------+
+| Docker Image                      |
+|-----------------------------------|
+| App Code                          |
+| Runtime (Java / Python / Node.js) |
+| Libraries                         |
+| Dependencies                      |
+| Config Files                      |
+| OS Base Layer                     |
++-----------------------------------+
+
+Characteristics of Docker Images:
+1. Read Only
+2. Portable
+3. Reusable
+4. Versioned
+
+Image Layers :
+Docker images are built in layers.
+
+Example:
+
+Layer 1 → Ubuntu Base OS
+Layer 2 → Install Java
+Layer 3 → Copy App Files
+Layer 4 → Start Command
+
+Benefits:
+✅ Faster builds
+✅ Layer caching
+✅ Smaller updates
+✅ Reuse layers
+
+Diagram of Layers
++----------------------+
+| App Layer            |
++----------------------+
+| Dependencies Layer   |
++----------------------+
+| Runtime Layer        |
++----------------------+
+| Base OS Layer        |
++----------------------+
+
+Where Images Come From:
+Public Registry
+
+Docker Hub
+-> docker pull nginx
+-> docker pull mysql
+
+Important Docker Image Commands:
+
+Pull Image: Download image from registry.
+           - docker pull nginx
+
+View Images:show pulled images and ther details
+           -docker images
+
+Build Image :Build image from Dockerfile.
+            -docker build -t myapp:v1 .
+
+Remove Image: delete the image created
+            -docker rmi nginx
+
+Inspect Image:Detailed metadata.
+            -docker inspect nginx
+=========================================================================================================================================================================
+Docker Containers:
+Docker Container is a lightweight, isolated runtime environment where an application runs using resources of the host system.
+Think simply:
+Image = Blueprint / TemplateContainer = Running App created from image
+Example:
+
+NGINX image → run container hosting website
+
+MySQL image → run database container
+
+
+What Exactly Is a Container?
+A container packages:
+
+
+Application code:
+Runtime (Java, Node.js, Python, etc.)
+Libraries
+Dependencies
+Environment variables
+Startup command
+
+It runs consistently on:
+Developer laptop
+Test server
+Production servers
+Cloud like Amazon Web Services
+
+Container Architecture
+-------+| Docker Container||--------|| Application Process|| Runtime / Libraries|| Dependencies || Writable Layer  |+------------+| Shared Host OS Kernel |+---------+| Host Server|+-----------------------------------+
+Unlike VMs, containers share the host OS kernel, so they are fast and lightweight.
+
+How Container Is Created
+Docker Image  ---> docker run ---> Container
+Example:
+        docker run -d -p 80:80 nginx
+Flow:
+
+Docker CLI sends request
+Docker Daemon checks image
+Creates writable layer
+Attaches network
+
+
+Starts main process
+Returns container ID
+
+Important Container Features
+1. Lightweight
+Starts in seconds.
+2. Isolated
+Each container has separate:
+Filesystem
+Process space
+Network namespace
+3. Portable
+Same behavior everywhere.
+4. Scalable
+Run many containers quickly.
+
+Container Lifecycle
+Created → Running → Paused → Stopped → Removed
+Commands:
+docker create nginxdocker start <id>docker stop <id>docker rm <id>
+
+Important Docker Container Commands:
+Run Container
+            - docker run -d --name web -p 80:80 nginx
+List Running Containers
+                       - docker ps
+List All Containers
+            - docker ps -a
+Stop Container
+            - docker stop web
+Start Again
+             - docker start web
+Delete Container
+             - docker rm web
+Logs
+             - docker logs web
+Execute Inside Container
+             - docker exec -it web /bin/bash
+
+Container Ports
+Applications inside container expose internal ports.
+Example:
+            - docker run -p 8080:80 nginx
+Meaning:
+Host Port 8080 → Container Port 80
+Users access host server port.
+
+
+Use Docker Volume:
+             -docker run -v mysql-data:/var/lib/mysql mysql
+
+
+
+
